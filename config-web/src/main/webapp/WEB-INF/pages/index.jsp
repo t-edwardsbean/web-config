@@ -3,144 +3,74 @@
 
 <div class="container-fluid">
     <div class="row">
-        <%@ include file="../common/navigator.jsp" %>
+        <%@ include file="monitor-navigator.jsp" %>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">91手机助手pc端周下载量</h1>
+            <h1>Monitor Browser</h1>
 
-            <div class="row placeholders">
+            <div class="well">
+                <div class="btn-group col-sm-offset-9">
+                    <a class="btn btn-status btn-success" data-value="SUCCEEDED">成功</a>
+                    <a class="btn btn-status btn-warning" data-value="RUNNING">正在运行</a>
+                    <a class="btn btn-status btn-danger disable-feedback" data-value="KILLED">已停止</a>
+                </div>
             </div>
 
-            <h2 class="sub-header">报表数据</h2>
-
             <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
+                        <th>服务名</th>
+                        <th>描述</th>
+                        <th>所有者</th>
+                        <th>状态</th>
+                        <th>上次修改</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>Lorem</td>
-                        <td>ipsum</td>
-                        <td>dolor</td>
-                        <td>sit</td>
+                    <tr style="cursor: pointer;">
+                        <td>appcache</td>
+                        <td>缓存查询框架</td>
+                        <td>loren</td>
+                        <td>
+                            <span class="label label-success">RUNNING</span>
+                        </td>
+                        <td>2014</td>
                     </tr>
-                    <tr>
-                        <td>1,002</td>
+                    <tr style="cursor: pointer;">
+                        <td>softquery</td>
                         <td>amet</td>
                         <td>consectetur</td>
-                        <td>adipiscing</td>
+                        <td>
+                            <span class="label label-success">RUNNING</span>
+                        </td>
                         <td>elit</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>Integer</td>
-                        <td>nec</td>
-                        <td>odio</td>
-                        <td>Praesent</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>libero</td>
-                        <td>Sed</td>
-                        <td>cursus</td>
-                        <td>ante</td>
-                    </tr>
-                    <tr>
-                        <td>1,004</td>
-                        <td>dapibus</td>
-                        <td>diam</td>
-                        <td>Sed</td>
-                        <td>nisi</td>
-                    </tr>
-                    <tr>
-                        <td>1,005</td>
-                        <td>Nulla</td>
-                        <td>quis</td>
-                        <td>sem</td>
-                        <td>at</td>
-                    </tr>
-                    <tr>
-                        <td>1,006</td>
-                        <td>nibh</td>
-                        <td>elementum</td>
-                        <td>imperdiet</td>
-                        <td>Duis</td>
-                    </tr>
-                    <tr>
-                        <td>1,007</td>
-                        <td>sagittis</td>
-                        <td>ipsum</td>
-                        <td>Praesent</td>
-                        <td>mauris</td>
-                    </tr>
-                    <tr>
-                        <td>1,008</td>
-                        <td>Fusce</td>
-                        <td>nec</td>
-                        <td>tellus</td>
-                        <td>sed</td>
-                    </tr>
-                    <tr>
-                        <td>1,009</td>
-                        <td>augue</td>
-                        <td>semper</td>
-                        <td>porta</td>
-                        <td>Mauris</td>
-                    </tr>
-                    <tr>
-                        <td>1,010</td>
-                        <td>massa</td>
-                        <td>Vestibulum</td>
-                        <td>lacinia</td>
-                        <td>arcu</td>
-                    </tr>
-                    <tr>
-                        <td>1,011</td>
-                        <td>eget</td>
-                        <td>nulla</td>
-                        <td>Class</td>
-                        <td>aptent</td>
-                    </tr>
-                    <tr>
-                        <td>1,012</td>
-                        <td>taciti</td>
-                        <td>sociosqu</td>
-                        <td>ad</td>
-                        <td>litora</td>
-                    </tr>
-                    <tr>
-                        <td>1,013</td>
-                        <td>torquent</td>
-                        <td>per</td>
-                        <td>conubia</td>
-                        <td>nostra</td>
-                    </tr>
-                    <tr>
-                        <td>1,014</td>
-                        <td>per</td>
-                        <td>inceptos</td>
-                        <td>himenaeos</td>
-                        <td>Curabitur</td>
-                    </tr>
-                    <tr>
-                        <td>1,015</td>
-                        <td>sodales</td>
-                        <td>ligula</td>
-                        <td>in</td>
-                        <td>libero</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="dataTables_info" id="jobsTable_info">Showing 1 to 30 of 100 entries</div>
+                </div>
+                <div class="pull-right">
+                    <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
+</div>
 </div>
 <%@ include file="../common/footer.jsp" %>

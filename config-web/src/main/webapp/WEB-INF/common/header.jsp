@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>91report</title>
+    <title>web-config</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
