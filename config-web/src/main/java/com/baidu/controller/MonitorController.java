@@ -21,7 +21,7 @@ public class MonitorController {
         return "monitor-index";
     }
 
-    @RequestMapping(value="/create", method= RequestMethod.POST)
+    @RequestMapping(value="/create", method= RequestMethod.GET)
     public String create(ModelMap model) {
         return "monitor-create";
     }
