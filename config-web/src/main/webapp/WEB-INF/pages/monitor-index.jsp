@@ -11,7 +11,7 @@
                         <a class="btn btn-status btn-danger disable-feedback" data-value="KILLED">已停止</a>
                     </span>
                     <input type="text" id="filterInput" class="form-control" placeholder="搜索用户名、名称等...">
-                    <a href="#" class="btn btn-default" role="button">创建</a>
+                    <a href="/monitor-create" class="btn btn-default" role="button">创建</a>
                 </form>
             </div>
 
