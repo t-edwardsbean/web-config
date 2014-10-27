@@ -16,8 +16,13 @@ public class MonitorController {
         return "monitor-index";
     }
 
-    @RequestMapping(value="/create", method= RequestMethod.POST)
+    @RequestMapping(value="/save", method= RequestMethod.POST)
     public String save(ModelMap model) {
         return "monitor-index";
+    }
+
+    @RequestMapping(value="/create", method= RequestMethod.POST)
+    public String create(ModelMap model) {
+        return "monitor-create";
     }
 }
