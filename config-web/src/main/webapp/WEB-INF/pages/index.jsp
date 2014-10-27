@@ -2,10 +2,6 @@
 <%@ include file="../common/header.jsp" %>
 
 <div class="container-fluid">
-    <div class="row">
-        <%@ include file="monitor-navigator.jsp" %>
-
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1>Monitor Browser</h1>
 
             <div class="well">
@@ -15,6 +11,7 @@
                         <a class="btn btn-status btn-danger disable-feedback" data-value="KILLED">已停止</a>
                     </span>
                     <input type="text" id="filterInput" class="form-control" placeholder="搜索用户名、名称等...">
+                    <a href="#" class="btn btn-default" role="button">创建</a>
                 </form>
             </div>
 
@@ -64,7 +61,7 @@
                     <div class="dataTables_info" id="jobsTable_info">Showing 1 to 30 of 100 entries</div>
                 </div>
 
-                <div class="pull-right">
+                <div class="pull-right" style="padding-right: 20px">
                     <ul class="pagination">
                         <li><a href="#">&laquo;</a></li>
                         <li><a href="#">1</a></li>
@@ -76,10 +73,5 @@
                     </ul>
                 </div>
             </div>
-
-
         </div>
-    </div>
-</div>
-</div>
 <%@ include file="../common/footer.jsp" %>

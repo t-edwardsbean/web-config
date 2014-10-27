@@ -42,7 +42,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="/report/new">压测配置</a></li>
-                <li><a href="#">监控配置</a></li>
+                <li><a href="/">监控配置</a></li>
             </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">登录</a></li>
