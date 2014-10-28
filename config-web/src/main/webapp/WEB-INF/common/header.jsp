@@ -37,12 +37,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">91架构组</a>
+            <a class="navbar-brand" href="#">DSF平台</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-left">
                 <li><a href="/monitor/index">监控</a></li>
                 <li><a href="/stress/index">压测</a></li>
+                <li><a href="/stress/index">JMX</a></li>
             </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">登录</a></li>
