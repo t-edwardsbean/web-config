@@ -24,6 +24,7 @@
     <script src="/resources/jquery-1.8.3.js"></script>
     <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
     <script src="/resources/bootstrap/js/docs.min.js"></script>
+    <script src="/resources/ext/js/juicer-min.js"></script>
 </head>
 
 <body>
