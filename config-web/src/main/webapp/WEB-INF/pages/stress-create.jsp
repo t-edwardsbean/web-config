@@ -59,6 +59,14 @@
 
     });
 
+    function testClose(){
+        $("#downloadCheck").html("");
+    }
+
+    function comfirmCheck() {
+        $("#nextBtn").removeClass("disabled");
+    }
+
     function addMethod() {
         if (currentMethod == 0) {
             currentMethod = 1;
@@ -93,6 +101,60 @@
             show:true
         });
     }
+
+    function queryService() {
+
+        $("#query").modal({
+            backdrop:'static',
+            show:true
+        });
+
+        var serviceId=0;
+        $("#downloadCheck").append("<dt>查询服务:</dt>");
+        $.ajax({
+            type:"post",
+            url: "check",
+            data : "serviceName=com.baidu.softquery.SoftQuery v1.0",
+            async: false,
+            dataType: "json",
+            success: function(json) {
+                if (json.code == "0") {
+                    serviceId = json.serviceId;
+                    $("#downloadCheck").append("<dd>服务存在</dd>");
+                    $("#downloadProgress").css("width","40%");
+                    $("#downloadCheck").append("<dt>载入接口:</dt>");
+                    $.ajax({
+                        type:"post",
+                        url: "load",
+                        data: "serviceId=" + serviceId,
+                        async: false,
+                        dataType: "json",
+                        success: function(json) {
+                            if (json.code == "0") {
+                                $("#downloadCheck").append("<dd>成功</dd>");
+                                $("#downloadProgress").css("width","100%");
+                                $("#confirmBtn").removeClass("disabled");
+                            } else {
+                                $("#checkError").html(json.msg);
+                                $("#checkError").show();
+                                $("#downloadCheck").append("<dd>失败</dd>");
+                                $("#downloadProgress").removeClass("progress-bar-success");
+                                $("#downloadProgress").addClass("progress-bar-danger");
+                            }
+                        }
+                    });
+                } else {
+                    $("#checkError").html(json.msg);
+                    $("#checkError").show();
+                    $("#downloadCheck").append("<dd>服务不存在</dd>");
+                    $("#downloadProgress").removeClass("progress-bar-success");
+                    $("#downloadProgress").addClass("bar bar-danger");
+                }
+            }
+        });
+
+
+    }
 </script>
 
 <%--服务查询下载窗口--%>
@@ -102,19 +164,21 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title">查询并下载接口</h4>
+                <h4 class="modal-title">检测服务</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modalBody">
                 <div class="progress">
-                    <div class="active progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                         aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                        <span class="sr-only">40% Complete (success)</span>
+                    <div id="downloadProgress" class="active progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                         aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="padding-top: 20px;width: 10%">
                     </div>
                 </div>
+                <dl class="dl-horizontal" id="downloadCheck">
+                </dl>
+                <div class="well" id="checkError" style="display: none"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="testClose()">Close</button>
+                <a id="confirmBtn" class="btn btn-primary disabled">确认</a>
             </div>
         </div>
     </div>
@@ -145,8 +209,7 @@
                         <input class="form-control" style="float: left"/>
                         <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
                     </div>
-                    <a id="testBtn" class="btn btn-primary" data-toggle="modal" data-target="#query"
-                       data-backdrop="static">测试</a>
+                    <a id="testBtn" class="btn btn-primary" onclick="queryService()">测试</a>
                 </div>
                 <div class="form-group">
                     <span class="col-sm-2 control-label" id="input02">描述</span>
@@ -261,7 +324,7 @@
         </div>
         <div class="form-actions">
             <a id="backBtn" class="btn btn-default disabled">返回</a>
-            <a id="nextBtn" class="btn btn-primary">下一步</a>
+            <a id="nextBtn" class="btn btn-primary disabled">下一步</a>
             <button id="saveBtn" class="btn btn-primary save" style="margin-left: 30px;display: none">保存</button>
         </div>
     </form>

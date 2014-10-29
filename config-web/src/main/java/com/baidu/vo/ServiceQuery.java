@@ -1,11 +1,11 @@
 package com.baidu.vo;
 
 /**
- * Created by edwardsbean on 14-10-28.
+ * Created by edwardsbean on 14-10-29.
  */
 public class ServiceQuery {
     private String serviceName;
-    private int status;
+    private String serviceId;
 
     public String getServiceName() {
         return serviceName;
@@ -15,11 +15,11 @@ public class ServiceQuery {
         this.serviceName = serviceName;
     }
 
-    public int getStatus() {
-        return status;
+    public String getServiceId() {
+        return serviceId;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 }

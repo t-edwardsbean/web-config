@@ -7,21 +7,35 @@
     <groupId>com.baidu</groupId>
     <artifactId>web-config</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>${project.version}</version>
 
     <modules>
         <module>config-web</module>
         <module>config-dao</module>
         <module>config-service</module>
         <module>config-tool</module>
+        <module>config-test</module>
+        <module>config-config</module>
     </modules>
     <properties>
+        <jackson.version>2.0.4</jackson.version>
+        <project.version>1.0-SNAPSHOT</project.version>
         <spring.version>3.2.0.RELEASE</spring.version>
         <profile.active>dev</profile.active>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3</version>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -47,8 +61,8 @@
     </dependencies>
     <repositories>
         <repository>
-            <id>oschina</id>
-            <url>http://maven.oschina.net/content/groups/public/</url>
+            <id>baidu</id>
+            <url>http://maven.scm.baidu.com:8081/nexus/content/groups/public/</url>
         </repository>
         <repository>
             <id>cloudera</id>

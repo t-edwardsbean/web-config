@@ -1,10 +1,16 @@
 package com.baidu.controller;
 
+import com.baidu.service.StressTestService;
+import com.baidu.vo.Msg;
 import com.baidu.vo.ServiceQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 
 
 /**
@@ -12,43 +18,52 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @RequestMapping("/stress")
-@SessionAttributes("serverName")
 public class StressTestController {
-    @RequestMapping(value="/create", method= RequestMethod.GET)
-    public String create(ModelMap model) {
+    private final static Logger log = LoggerFactory.getLogger(StressTestController.class.getName());
+
+    @Autowired
+    private StressTestService stressTestService;
+
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String create() {
         return "stress-create";
     }
 
-    @RequestMapping(value="/index", method= RequestMethod.GET)
-    public String list(ModelMap model) {
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String list() {
         return "stress-index";
     }
 
     @ResponseBody
-    @RequestMapping(value="/test", method= RequestMethod.POST)
-    public String download(@RequestParam String serviceName,@ModelAttribute("serviceName")ServiceQuery serviceQuery, Model model) {
-        if (serviceQuery != null) {
-            return "ok";
-        }else {
-            /**
-             * TODO 下载
-             */
-            serviceQuery = new ServiceQuery();
-            serviceQuery.setServiceName(serviceName);
-            model.addAttribute("serviceName");
-            return "downloading";
-        }
+    @RequestMapping(value = "/check", method = RequestMethod.POST)
+    public Msg checkService(@RequestParam String serviceName) throws Exception {
+        log.info("当前classpath:" + System.getProperty("java.class.path"));
+        log.info("当前路径:" + new File("").getAbsolutePath());
+        String id = stressTestService.queryService(serviceName);
+        Msg msg = new Msg();
+        ServiceQuery serviceQuery = new ServiceQuery();
+        serviceQuery.setServiceName(serviceName);
+        serviceQuery.setServiceId(id);
+        msg.setReturnData(serviceQuery);
+        return msg;
     }
 
     @ResponseBody
-    @RequestMapping(value="/query", method= RequestMethod.POST)
-    public String query(@ModelAttribute("serviceName")ServiceQuery serviceQuery) {
-        /**
-         * TODO 查询进度
-         */
-        return "";
+    @RequestMapping(value = "/load", method = RequestMethod.POST)
+    public Msg loadService(@RequestParam String serviceId) throws Exception {
+        stressTestService.download(serviceId);
+        Msg msg = new Msg();
+        return msg;
     }
 
+/**
+ * 内网速度快，暂时不用进度条
+ */
+//    @ResponseBody
+//    @RequestMapping(value="/progress", method= RequestMethod.POST)
+//    public String query(@ModelAttribute("serviceName")ServiceQuery serviceQuery) {
+//        return "";
+//    }
 
 
 }
