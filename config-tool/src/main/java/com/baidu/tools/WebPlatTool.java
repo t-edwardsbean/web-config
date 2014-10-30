@@ -60,9 +60,11 @@ public class WebPlatTool {
     }
 
     public static File download(String webToolAddrs, String serviceId, String path) throws Exception {
-        //查找本地cache
         File file = new File(path + File.separator + serviceId + ".jar");
         log.info("Jar location:" + file.getAbsolutePath());
+        if(file.delete()){
+            log.info("清空缓存jar");
+        }
         try {
             file.createNewFile();
             log.debug("Downloading file:" + file.getAbsolutePath());

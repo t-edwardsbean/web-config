@@ -7,10 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
+import java.util.List;
 
 
 /**
@@ -37,8 +36,6 @@ public class StressTestController {
     @ResponseBody
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public Msg checkService(@RequestParam String serviceName) throws Exception {
-        log.info("当前classpath:" + System.getProperty("java.class.path"));
-        log.info("当前路径:" + new File("").getAbsolutePath());
         String id = stressTestService.queryService(serviceName);
         Msg msg = new Msg();
         ServiceQuery serviceQuery = new ServiceQuery();
@@ -53,6 +50,16 @@ public class StressTestController {
     public Msg loadService(@RequestParam String serviceId) throws Exception {
         stressTestService.download(serviceId);
         Msg msg = new Msg();
+        return msg;
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/methods", method = RequestMethod.GET)
+    public Msg getServiceMethods(@RequestParam String serviceId,@RequestParam String serviceName) throws Exception {
+        List list = stressTestService.getMethods(serviceName,serviceId);
+        Msg msg = new Msg();
+        msg.setReturnData(list);
         return msg;
     }
 

@@ -23,6 +23,9 @@
 <script>
 
     var currentMethod = 0;
+    var serviceName = "";
+    var serviceId = 0;
+    var methodList;
 
     $(document).ready(function () {
         juicer.set({
@@ -59,6 +62,13 @@
 
     });
 
+    function reset(){
+        $("#downloadCheck").html("");
+        $("#nextBtn").removeClass("disabled");
+        $("#nextBtn").addClass("disabled");
+        $("#methods").html("");
+    }
+
     function testClose(){
         $("#downloadCheck").html("");
     }
@@ -74,9 +84,24 @@
             currentMethod ++;
         }
         var template = $('#tpl_method').html();
+        //获取方法列表
+        $.ajax({
+            type: "get",
+            url: "methods",
+            data: {serviceName:"com.baidu.softquery.SoftQuery v1.0",serviceId:serviceId},
+            async: false,
+            dataType: "json",
+            success: function (json) {
+                if (json.code == "0") {
+                    methodList = json.returnData;
+                }
+            }
+        });
+
         var data =
         {
-            methodID: currentMethod
+            methodID: currentMethod,
+            list: methodList
         };
         var html = juicer(template,data);
         $("#methods").append(html);
@@ -104,12 +129,13 @@
 
     function queryService() {
 
+        reset();
+
         $("#query").modal({
             backdrop:'static',
             show:true
         });
 
-        var serviceId=0;
         $("#downloadCheck").append("<dt>查询服务:</dt>");
         $.ajax({
             type:"post",
@@ -119,7 +145,7 @@
             dataType: "json",
             success: function(json) {
                 if (json.code == "0") {
-                    serviceId = json.serviceId;
+                    serviceId = json.returnData.serviceId;
                     $("#downloadCheck").append("<dd>服务存在</dd>");
                     $("#downloadProgress").css("width","40%");
                     $("#downloadCheck").append("<dt>载入接口:</dt>");
@@ -134,6 +160,7 @@
                                 $("#downloadCheck").append("<dd>成功</dd>");
                                 $("#downloadProgress").css("width","100%");
                                 $("#confirmBtn").removeClass("disabled");
+                                $("#nextBtn").removeClass("disabled");
                             } else {
                                 $("#checkError").html(json.msg);
                                 $("#checkError").show();
@@ -178,7 +205,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" onclick="testClose()">Close</button>
-                <a id="confirmBtn" class="btn btn-primary disabled">确认</a>
+                <a id="confirmBtn" class="btn btn-primary disabled" data-dismiss="modal" onclick="comfirmCheck()">确认</a>
             </div>
         </div>
     </div>
@@ -360,9 +387,10 @@
 <script type="text/template" id="tpl_method">
     <tr id="#{methodID}Method">
         <td>
-            <select  class="form-control">
-                <option>GetTinySoft</option>
-                <option>GetLargeSoft</option>
+            <select id="#{methodID}MethodList"  class="form-control">
+                {@each list as it,k}
+                    <option>#{it.methodName}</option>
+                {@/each}
             </select>
         </td>
         <td>
