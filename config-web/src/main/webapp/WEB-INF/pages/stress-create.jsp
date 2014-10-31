@@ -47,7 +47,6 @@
             "step3": function () {
                 if (validateStep("step1") && validateStep("step2")) {
                     showStep("step3");
-                    $("#nextBtn").addClass("disabled");
                 }
                 else {
                     routie("step1");
@@ -63,8 +62,10 @@
                 $("#backBtn").addClass("disabled");
             }
             if(step == "step3") {
+                $("#nextBtn").addClass("disabled");
                 $("#saveBtn").show();
             } else {
+                $("#nextBtn").removeClass("disabled");
                 $("#saveBtn").hide();
             }
             $("a.step").parent().removeClass("active");
