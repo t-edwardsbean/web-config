@@ -227,146 +227,153 @@
 <div class="container-fluid">
     <h1>Stress Test Creator</h1>
 
-
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#step1" class="step">第一步：服务</a></li>
+        <li><a href="#step2" class="step">第二步：接口</a></li>
+        <li><a href="#step4" class="step">第三步:频率</a></li>
+    </ul>
     <form class="form-horizontal" id="itemForm" method="POST" style="margin-top: 0" action="/monitor-create">
         <div id="steps" class="steps">
             <%--参数设置--%>
             <div id="params">
             </div>
 
-            <div id="step1">
-                <div class="alert alert-info">
-                    <h3>压测配置</h3>
-                    请尽量完整填写下面参数，配置测试的频率，以及用于生成向ganglia汇报的metrics
-                </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label">名称</span>
-
-                    <div class="col-sm-3">
-                        <input id="serviceName" class="form-control" style="float: left"/>
-
-                        <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
+                <div id="step1">
+                    <div class="alert alert-info">
+                        <h3>服务配置</h3>
+                        请配置需要测试的服务，并测试服务服务是否存在
                     </div>
-                    <a id="testBtn" class="btn btn-primary" onclick="queryService()"  data-toggle="tooltip" data-placement="right" title="测试服务是否正常">测试</a>
-                </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label" id="input02">描述</span>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label">名称</span>
 
-                    <div class="col-sm-3">
-                        <input class="form-control">
+                        <div class="col-sm-3">
+                            <input id="serviceName" class="form-control" style="float: left">
 
-                        <p class="help-block">如：统计缓存查询服务的QPS等</p>
+                            <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
+                        </div>
+                        <a id="testBtn" class="btn btn-primary" onclick="queryService()" data-toggle="tooltip" data-placement="right" title="测试服务是否正常">测试</a>
                     </div>
-                </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label" id="input03">请求延迟</span>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label" id="input02">描述</span>
 
-                    <div class="col-sm-3">
-                        <input class="form-control" type="text" size="5"
-                               onkeyup="value=value.replace(/[^\d]/g,'')"
-                               onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>
+                        <div class="col-sm-3">
+                            <input class="form-control">
 
-                        <p class="help-block">每次调用服务时，延迟多少毫秒，如：10</p>
+                            <p class="help-block">如：统计缓存查询服务的QPS等</p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label" id="input05">失败延迟</span>
 
-                    <div class="col-sm-3">
-                        <input class="form-control" type="text" size="5"
-                               onkeyup="value=value.replace(/[^\d]/g,'')"
-                               onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label" id="input08">组名</span>
 
-                        <p class="help-block">每次服务调用失败时，延迟多少毫秒，如：10000</p>
+                        <div class="col-sm-3">
+                            <input class="form-control">
+
+                            <p class="help-block">Ganglia监控用的组名，如：SoftQuery</p>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label" id="input06">Server Num</span>
 
-                    <div class="col-sm-3">
-                        <select class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                            <option>13</option>
-                            <option>14</option>
-                            <option>15</option>
-                        </select>
+                <div id="step2" style="display: none">
+                    <div class="alert alert-info">
+                        <h3>接口配置</h3>
+                        请选择要测试的接口，并设置接口的参数值
+                    </div>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label" id="step2-name">压测接口</span>
 
-                        <p class="help-block">模拟多少台客户端服务器</p>
+                        <div class="col-sm-6">
+                            <table class="table-condensed designTable">
+                                <thead>
+                                <tr>
+                                    <th style="min-width: 220px;">名称</th>
+                                    <th>参数值</th>
+                                </tr>
+                                </thead>
+                                <tbody id="methods">
+                                </tbody>
+                            </table>
+
+                            <a id="addBtn" class="btn btn-default" style="margin-top: 10px">Add</a>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label" id="input07">Thread Num</span>
 
-                    <div class="col-sm-3">
-                        <select class="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
-                            <option>10</option>
-                            <option>11</option>
-                            <option>12</option>
-                            <option>13</option>
-                            <option>14</option>
-                            <option>15</option>
-                        </select>
 
-                        <p class="help-block">每台客户端服务器启动多少个请求线程</p>
+                <div id="step3" style="display: none">
+                    <div class="alert alert-info">
+                        <h3>频率配置</h3>
+                        请适当的配置压测的各项参数，不填写将按默认配置
+                    </div>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label" id="input03">请求延迟</span>
+
+                        <div class="col-sm-3">
+                            <input class="form-control" type="text" size="5" onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+
+                            <p class="help-block">每次调用服务时，延迟多少毫秒，如：10</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label" id="input05">失败延迟</span>
+
+                        <div class="col-sm-3">
+                            <input class="form-control" type="text" size="5" onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+
+                            <p class="help-block">每次服务调用失败时，延迟多少毫秒，如：10000</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label" id="input06">Server Num</span>
+
+                        <div class="col-sm-3">
+                            <select class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+
+                            <p class="help-block">模拟多少台客户端服务器</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <span class="col-sm-2 control-label" id="input07">Thread Num</span>
+
+                        <div class="col-sm-3">
+                            <select class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                            </select>
+
+                            <p class="help-block">每台客户端服务器启动多少个请求线程</p>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label" id="input08">组名</span>
-
-                    <div class="col-sm-3">
-                        <input class="form-control">
-
-                        <p class="help-block">Ganglia监控用的组名，如：SoftQuery</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="step2" style="display: none">
-                <div class="alert alert-info">
-                    <h3>压测配置</h3>
-                    请尽量完整填写下面参数，配置需要测试的方法，以及对应的参数值
-                </div>
-                <div class="form-group">
-                    <span class="col-sm-2 control-label" id="step2-name">压测接口</span>
-
-                    <div class="col-sm-6">
-                        <table class="table-condensed designTable">
-                            <thead>
-                            <tr>
-                                <th style="min-width: 220px;">名称</th>
-                                <th>参数值</th>
-                            </tr>
-                            </thead>
-                            <tbody id="methods">
-                            </tbody>
-                        </table>
-                        <%--添加一个测试接口--%>
-                        <a id="addBtn" class="btn btn-default" style="margin-top: 10px">Add</a>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
         <div class="form-actions">
             <a id="backBtn" class="btn btn-default disabled">返回</a>
