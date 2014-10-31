@@ -17,6 +17,17 @@ public class FrameworkConfig {
     @Value("${dsf.webtoolplat.adds}")
     private String webToolPlatAddrsCfg;
 
+    @Value("${dsf.mode}")
+    private String mode;
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
     public String getGangliaAddrsCfg() {
         return gangliaAddrsCfg;
     }

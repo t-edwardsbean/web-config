@@ -23,9 +23,9 @@
 <script>
 
     var currentMethod = 0;
-    var serviceName = "";
     var serviceId = 0;
     var methodList;
+    var serviceName = "";
 
     $(document).ready(function () {
         juicer.set({
@@ -45,6 +45,7 @@
             $("#backBtn").removeClass("disabled");
             $("#saveBtn").show();
             $("#nextBtn").addClass("disabled");
+            addMethod();
 
         });
 
@@ -62,14 +63,18 @@
 
     });
 
-    function reset(){
+    function reset() {
+        currentMethod = 0;
+        methodList = "";
+        serviceId = "";
+        serviceName = "";
         $("#downloadCheck").html("");
         $("#nextBtn").removeClass("disabled");
         $("#nextBtn").addClass("disabled");
         $("#methods").html("");
     }
 
-    function testClose(){
+    function testClose() {
         $("#downloadCheck").html("");
     }
 
@@ -81,29 +86,15 @@
         if (currentMethod == 0) {
             currentMethod = 1;
         } else {
-            currentMethod ++;
+            currentMethod++;
         }
         var template = $('#tpl_method').html();
-        //获取方法列表
-        $.ajax({
-            type: "get",
-            url: "methods",
-            data: {serviceName:"com.baidu.softquery.SoftQuery v1.0",serviceId:serviceId},
-            async: false,
-            dataType: "json",
-            success: function (json) {
-                if (json.code == "0") {
-                    methodList = json.returnData;
-                }
-            }
-        });
-
         var data =
         {
             methodID: currentMethod,
             list: methodList
         };
-        var html = juicer(template,data);
+        var html = juicer(template, data);
         $("#methods").append(html);
     }
 
@@ -113,17 +104,31 @@
     }
 
     function paramSet(id) {
-        var template = $("#tpl_param").html();
-        var data =
-        {
-            methodID: id
-        };
-        var modal = juicer(template,data);
-        $("#params").append(modal);
+        //获取用户选中的方法
+        var selectedIndex = $("#" + id + "List")[0].selectedIndex;
+        var lastSelectIndex = $("#" + id + "SelectIndex").val();
         var paramID = "#" + id + "Param";
+
+        if (lastSelectIndex != selectedIndex) {
+            //用户切换了测试方法，或者第一次要设置参数,删除旧的参数填写框
+            $(paramID).remove();
+            var methodParams = methodList[selectedIndex].methodParams;
+            var template = $("#tpl_param").html();
+            var data =
+            {
+                methodID: id,
+                selectIndex: selectedIndex,
+                list: methodParams
+            };
+            //新建一个参数填写框
+            var modal = juicer(template, data);
+            $("#params").append(modal);
+        }
+
+        //弹出
         $(paramID).modal({
-            backdrop:'static',
-            show:true
+            backdrop: 'static',
+            show: true
         });
     }
 
@@ -132,33 +137,39 @@
         reset();
 
         $("#query").modal({
-            backdrop:'static',
-            show:true
+            backdrop: 'static',
+            show: true
         });
 
         $("#downloadCheck").append("<dt>查询服务:</dt>");
         $.ajax({
-            type:"post",
+            type: "post",
             url: "check",
-            data : "serviceName=com.baidu.softquery.SoftQuery v1.0",
+            data: {serviceName: "com.baidu.softquery.SoftQuery v1.0"},
             async: false,
             dataType: "json",
-            success: function(json) {
+            success: function (json) {
+                //查询服务
                 if (json.code == "0") {
                     serviceId = json.returnData.serviceId;
+                    serviceName = json.returnData.serviceName;
                     $("#downloadCheck").append("<dd>服务存在</dd>");
-                    $("#downloadProgress").css("width","40%");
+                    $("#downloadProgress").css("width", "40%");
                     $("#downloadCheck").append("<dt>载入接口:</dt>");
                     $.ajax({
-                        type:"post",
+                        type: "post",
                         url: "load",
-                        data: "serviceId=" + serviceId,
+                        data: {serviceId: serviceId, serviceName: "com.baidu.softquery.SoftQuery v1.0"},
                         async: false,
                         dataType: "json",
-                        success: function(json) {
+                        success: function (json) {
+                            //载入接口列表
                             if (json.code == "0") {
+                                methodList = json.returnData
                                 $("#downloadCheck").append("<dd>成功</dd>");
-                                $("#downloadProgress").css("width","100%");
+                                $("#downloadCheck").append("<dt>服务名称:</dt>");
+                                $("#downloadCheck").append("<dd>" + serviceName + "</dd>");
+                                $("#downloadProgress").css("width", "100%");
                                 $("#confirmBtn").removeClass("disabled");
                                 $("#nextBtn").removeClass("disabled");
                             } else {
@@ -195,7 +206,8 @@
             </div>
             <div class="modal-body" id="modalBody">
                 <div class="progress">
-                    <div id="downloadProgress" class="active progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                    <div id="downloadProgress" class="active progress-bar progress-bar-success progress-bar-striped"
+                         role="progressbar"
                          aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="padding-top: 20px;width: 10%">
                     </div>
                 </div>
@@ -210,8 +222,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 <div class="container-fluid">
@@ -230,10 +240,11 @@
                     请尽量完整填写下面参数，配置测试的频率，以及用于生成向ganglia汇报的metrics
                 </div>
                 <div class="form-group">
-                    <span class="col-sm-2 control-label" id="input01">名称</span>
+                    <span class="col-sm-2 control-label">名称</span>
 
                     <div class="col-sm-3">
-                        <input class="form-control" style="float: left"/>
+                        <input id="serviceName" class="form-control" style="float: left"/>
+
                         <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
                     </div>
                     <a id="testBtn" class="btn btn-primary" onclick="queryService()">测试</a>
@@ -243,6 +254,7 @@
 
                     <div class="col-sm-3">
                         <input class="form-control">
+
                         <p class="help-block">如：统计缓存查询服务的QPS等</p>
                     </div>
                 </div>
@@ -253,6 +265,7 @@
                         <input class="form-control" type="text" size="5"
                                onkeyup="value=value.replace(/[^\d]/g,'')"
                                onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>
+
                         <p class="help-block">每次调用服务时，延迟多少毫秒，如：10</p>
                     </div>
                 </div>
@@ -269,6 +282,7 @@
                 </div>
                 <div class="form-group">
                     <span class="col-sm-2 control-label" id="input06">Server Num</span>
+
                     <div class="col-sm-3">
                         <select class="form-control">
                             <option>1</option>
@@ -287,11 +301,13 @@
                             <option>14</option>
                             <option>15</option>
                         </select>
+
                         <p class="help-block">模拟多少台客户端服务器</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <span class="col-sm-2 control-label" id="input07">Thread Num</span>
+
                     <div class="col-sm-3">
                         <select class="form-control">
                             <option>1</option>
@@ -310,11 +326,13 @@
                             <option>14</option>
                             <option>15</option>
                         </select>
+
                         <p class="help-block">每台客户端服务器启动多少个请求线程</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <span class="col-sm-2 control-label" id="input08">组名</span>
+
                     <div class="col-sm-3">
                         <input class="form-control">
 
@@ -330,6 +348,7 @@
                 </div>
                 <div class="form-group">
                     <span class="col-sm-2 control-label" id="step2-name">压测接口</span>
+
                     <div class="col-sm-6">
                         <table class="table-condensed designTable">
                             <thead>
@@ -372,7 +391,33 @@
                     <h4 class="modal-title">参数设置</h4>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <input type="text" id="#{methodID}SelectIndex" style="display: none" value="#{selectIndex}"/>
+                    <div class="alert alert-success" role="alert">参数类型为
+                        <strong>基本类型</strong>
+                        的，如int,long,String,Enum等，请直接填写参数值。参数类型为
+                        <strong>复杂类型</strong>
+                        的，请使用json格式，如{ userName:edwardsbean,age:18 }
+                    </div>
+                    <table class="table-condensed designTable">
+                        <thead>
+                        <tr>
+                            <th style="min-width: 40px">参数</th>
+                            <th style="min-width: 100px">参数类型</th>
+                            <th class="col-sm-10">参数值</th>
+                        </tr>
+                        </thead>
+                        <tbody id="#{methodID}ParamBody">
+                        {@each list as item,index}
+                        <tr>
+                            <td>arg#{index}</td>
+                            <td>#{item}</td>
+                            <td>
+                                <input class="form-control"/>
+                            </td>
+                        </tr>
+                        {@/each}
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -387,13 +432,13 @@
 <script type="text/template" id="tpl_method">
     <tr id="#{methodID}Method">
         <td>
-            <select id="#{methodID}MethodList"  class="form-control">
-                {@each list as it,k}
-                    <option>#{it.methodName}</option>
+            <select id="#{methodID}MethodList" class="form-control">
+                {@each list as it}
+                <option value="#{it.methodName}">#{it.methodName}</option>
                 {@/each}
             </select>
         </td>
-        <td>
+        <td class="col-sm-3">
             <a class="btn btn-default" onclick="paramSet('#{methodID}Method')">设置</a>
             <a class="btn btn-default" onclick="deleteMethod('#{methodID}Method')">删除</a>
         </td>

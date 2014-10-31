@@ -22,7 +22,7 @@ public class StressTestServiceImplTest {
         System.out.println(clazz.getMethods()[0].getName());
     }
 
-    //java自带的类加载器，不能用相对路径
+    //java自带的类加载器，不能用相对路径?
     @Test
     public void testSystemClassLoader() throws Exception {
         URLClassLoader classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();

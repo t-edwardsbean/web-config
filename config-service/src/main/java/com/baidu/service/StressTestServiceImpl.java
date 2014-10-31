@@ -1,13 +1,14 @@
 package com.baidu.service;
 
 import com.baidu.config.FrameworkConfig;
+import com.baidu.service.vo.SimpleMethod;
 import com.baidu.tools.Page;
+import com.baidu.tools.ReflectionUtil;
 import com.baidu.tools.WebPlatTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.xeustechnologies.jcl.JarClassLoader;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -22,6 +23,7 @@ public class StressTestServiceImpl implements StressTestService {
     private final static Logger log = LoggerFactory.getLogger(StressTestServiceImpl.class.getName());
     public static String jarPath = System.getProperty("project.root")+ File.separator + "libext";
 
+
     @Autowired
     private FrameworkConfig frameworkConfig;
 
@@ -33,10 +35,11 @@ public class StressTestServiceImpl implements StressTestService {
     }
 
     @Override
-    public void download(String id) throws Exception{
+    public File download(String id) throws Exception{
         File dir = new File(jarPath);
         dir.mkdirs();
-        WebPlatTool.download(frameworkConfig.getWebToolPlatAddrsCfg(), id, jarPath);
+        File jar = WebPlatTool.download(frameworkConfig.getWebToolPlatAddrsCfg(), id, jarPath);
+        return jar;
     }
 
     @Override
@@ -45,22 +48,27 @@ public class StressTestServiceImpl implements StressTestService {
     }
 
     @Override
-    public List<String> getMethods(String serviceName,String id) {
-        JarClassLoader jcl = new JarClassLoader();
-        String jar = jarPath + File.separator + id + ".jar";
-        log.info("加载接口包：" + jar);
-        jcl.add(jar);
-        try {
-            Class clazz = Class.forName(serviceName.split(" ")[0] + "$Iface",true,jcl);
-            List<String> list = new ArrayList();
-            Method[] methods = clazz.getMethods();
-            for (Method method:methods) {
-                list.add(method.getName());
+    public List<SimpleMethod> loadService(String serviceName,String jar,boolean clean) throws ClassNotFoundException{
+        String className = serviceName.split(" ")[0] + "$Iface";
+        List<Method> list = ReflectionUtil.getMethods(jar,className);
+        List<SimpleMethod> methods = new ArrayList<>();
+        for (Method method : list) {
+            SimpleMethod simpleMethod = new SimpleMethod();
+            simpleMethod.setMethodName(method.getName());
+            Class[] paramClass = method.getParameterTypes();
+            List<String> SimpleParams = new ArrayList<>();
+            for (Class param : paramClass) {
+                SimpleParams.add(param.getSimpleName());
             }
-            return list;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            simpleMethod.setMethodParams(SimpleParams);
+            methods.add(simpleMethod);
         }
-        return null;
+        File jarFile = new File(jar);
+        if (clean) {
+            jarFile.delete();
+        }
+        return methods;
     }
+
+
 }

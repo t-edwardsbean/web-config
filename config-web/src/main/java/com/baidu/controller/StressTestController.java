@@ -1,5 +1,6 @@
 package com.baidu.controller;
 
+import com.baidu.config.FrameworkConfig;
 import com.baidu.service.StressTestService;
 import com.baidu.vo.Msg;
 import com.baidu.vo.ServiceQuery;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -19,7 +21,10 @@ import java.util.List;
 @RequestMapping("/stress")
 public class StressTestController {
     private final static Logger log = LoggerFactory.getLogger(StressTestController.class.getName());
+    public static String jarPath = System.getProperty("project.root")+ File.separator + "libext";
 
+    @Autowired
+    private FrameworkConfig frameworkConfig;
     @Autowired
     private StressTestService stressTestService;
 
@@ -47,17 +52,17 @@ public class StressTestController {
 
     @ResponseBody
     @RequestMapping(value = "/load", method = RequestMethod.POST)
-    public Msg loadService(@RequestParam String serviceId) throws Exception {
-        stressTestService.download(serviceId);
-        Msg msg = new Msg();
-        return msg;
-    }
-
-
-    @ResponseBody
-    @RequestMapping(value = "/methods", method = RequestMethod.GET)
-    public Msg getServiceMethods(@RequestParam String serviceId,@RequestParam String serviceName) throws Exception {
-        List list = stressTestService.getMethods(serviceName,serviceId);
+    public Msg loadService(@RequestParam String serviceId,@RequestParam String serviceName) throws Exception {
+        String location;
+        List list = null;
+        if (frameworkConfig.getMode().equals("debug")){
+            location = jarPath + File.separator + "thrift.jar";
+            list = stressTestService.loadService(serviceName,location,false);
+        } else {
+            File jar = stressTestService.download(serviceId);
+            location = jar.getAbsolutePath();
+            list = stressTestService.loadService(serviceName,location,true);
+        }
         Msg msg = new Msg();
         msg.setReturnData(list);
         return msg;

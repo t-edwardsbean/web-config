@@ -2,6 +2,7 @@ package com.baidu.tools;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xeustechnologies.jcl.JarClassLoader;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -133,5 +134,26 @@ public class ReflectionUtil {
             }
         }
         return reflectMethods;
+    }
+
+    /**
+     * java8之前都无法获取参数名
+     * @param jar
+     * @param className
+     * @return
+     * @throws ClassNotFoundException
+     */
+    public static List<Method> getMethods(String jar, String className) throws ClassNotFoundException {
+        JarClassLoader jcl = new JarClassLoader();
+        log.info("加载接口包：" + jar);
+        jcl.add(jar);
+        Class clazz = Class.forName(className, true, jcl);
+        List<Method> list = new ArrayList();
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            list.add(method);
+        }
+        return list;
+
     }
 }
