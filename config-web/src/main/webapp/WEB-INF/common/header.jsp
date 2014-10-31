@@ -24,6 +24,7 @@
     <link href="/resources/bootstrap/css/dashboard.css" rel="stylesheet">
     <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
     <script src="/resources/ext/js/juicer-min.js"></script>
+
 </head>
 
 <body>
