@@ -16,14 +16,13 @@
 
     <title>web-config</title>
 
+    <script src="/resources/jquery-2.1.1.min.js"></script>
     <!-- Bootstrap core CSS -->
     <link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/resources/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/resources/bootstrap/css/dashboard.css" rel="stylesheet">
-    <script src="/resources/assets/js/esl.js"></script>
-    <script src="/resources/jquery-1.8.3.js"></script>
     <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/resources/bootstrap/js/docs.min.js"></script>
     <script src="/resources/ext/js/juicer-min.js"></script>
 </head>
 

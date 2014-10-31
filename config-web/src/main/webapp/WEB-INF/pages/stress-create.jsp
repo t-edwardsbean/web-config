@@ -247,7 +247,7 @@
 
                         <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
                     </div>
-                    <a id="testBtn" class="btn btn-primary" onclick="queryService()">测试</a>
+                    <a id="testBtn" class="btn btn-primary" onclick="queryService()"  data-toggle="tooltip" data-placement="right" title="测试服务是否正常">测试</a>
                 </div>
                 <div class="form-group">
                     <span class="col-sm-2 control-label" id="input02">描述</span>
