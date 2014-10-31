@@ -6,6 +6,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="../common/header.jsp" %>
+<script src="/resources/ext/js/routie-0.3.0.min.js" type="text/javascript" charset="utf-8"></script>
 <style>
     .form-actions {
         padding: 19px 190px 20px;
@@ -28,6 +29,84 @@
     var serviceName = "";
 
     $(document).ready(function () {
+
+        var currentStep = "step1";
+        //锚点路由
+        routie({
+            "step1": function () {
+                showStep("step1");
+            },
+            "step2": function () {
+                if (validateStep("step1")) {
+                    showStep("step2");
+                }
+                else {
+                    routie("step1");
+                }
+            },
+            "step3": function () {
+                if (validateStep("step1") && validateStep("step2")) {
+                    showStep("step3");
+                    $("#nextBtn").addClass("disabled");
+                }
+                else {
+                    routie("step1");
+                }
+            }
+        });
+
+        function showStep(step) {
+            currentStep = step;
+            if (step != "step1") {
+                $("#backBtn").removeClass("disabled");
+            }else {
+                $("#backBtn").addClass("disabled");
+            }
+            if(step == "step3") {
+                $("#saveBtn").show();
+            } else {
+                $("#saveBtn").hide();
+            }
+            $("a.step").parent().removeClass("active");
+            $("a.step[href=#" + step + "]").parent().addClass("active");
+            $(".stepDetails").hide();
+            $("#" + step).show();
+        }
+
+        function validateStep(step) {
+            var proceed = true;
+            $("#" + step).find("[validate=true]").each(function () {
+                if ($(this).val().trim() == "") {
+                    proceed = false;
+                    $(this).parents(".form-group").addClass("has-error");
+                    $(this).parent().find(".help-block").remove();
+                    $(this).after("<span class=\"help-block\"><strong>此字段为必填字段</strong></span>");
+                }
+            });
+            return proceed;
+        }
+
+
+        $("#backBtn").click(function () {
+            var nextStep = (currentStep.substr(4) * 1 - 1);
+            if (nextStep >= 1) {
+                routie("step" + nextStep);
+            }
+        });
+
+        $("#nextBtn").click(function () {
+            var nextStep = (currentStep.substr(4) * 1 + 1);
+            if (nextStep <= $(".step").length) {
+                routie("step" + nextStep);
+            }
+        });
+
+        $("[validate=true]").change(function () {
+            $(this).parents(".form-group").removeClass("has-error");
+            $(this).parent().find(".help-block").remove();
+        });
+
+
         juicer.set({
             'tag::operationOpen': '{@',
             'tag::operationClose': '}',
@@ -39,23 +118,23 @@
             'tag::commentClose': '}'
         });
 
-        $("#nextBtn").click(function () {
-            $("#step1").hide();
-            $("#step2").show();
-            $("#backBtn").removeClass("disabled");
-            $("#saveBtn").show();
-            $("#nextBtn").addClass("disabled");
-            addMethod();
-
-        });
-
-        $("#backBtn").click(function () {
-            $("#step2").hide();
-            $("#step1").show();
-            $("#backBtn").addClass("disabled");
-            $("#saveBtn").hide();
-            $("#nextBtn").removeClass("disabled");
-        });
+//        $("#nextBtn").click(function () {
+//            $("#step1").hide();
+//            $("#step2").show();
+//            $("#backBtn").removeClass("disabled");
+//            $("#saveBtn").show();
+//            $("#nextBtn").addClass("disabled");
+//            addMethod();
+//
+//        });
+//
+//        $("#backBtn").click(function () {
+//            $("#step2").hide();
+//            $("#step1").show();
+//            $("#backBtn").addClass("disabled");
+//            $("#saveBtn").hide();
+//            $("#nextBtn").removeClass("disabled");
+//        });
 
         $("#addBtn").click(function () {
             addMethod();
@@ -65,13 +144,17 @@
 
     function reset() {
         currentMethod = 0;
-        methodList = "";
+        methodList = null;
         serviceId = "";
         serviceName = "";
         $("#downloadCheck").html("");
         $("#nextBtn").removeClass("disabled");
         $("#nextBtn").addClass("disabled");
         $("#methods").html("");
+    }
+
+    function resetParams(id){
+        $("#" + id).find("input").val("");
     }
 
     function testClose() {
@@ -171,7 +254,7 @@
                                 $("#downloadCheck").append("<dd>" + serviceName + "</dd>");
                                 $("#downloadProgress").css("width", "100%");
                                 $("#confirmBtn").removeClass("disabled");
-                                $("#nextBtn").removeClass("disabled");
+                                addMethod();
                             } else {
                                 $("#checkError").html(json.msg);
                                 $("#checkError").show();
@@ -230,7 +313,7 @@
     <ul class="nav nav-pills">
         <li class="active"><a href="#step1" class="step">第一步：服务</a></li>
         <li><a href="#step2" class="step">第二步：接口</a></li>
-        <li><a href="#step4" class="step">第三步:频率</a></li>
+        <li><a href="#step3" class="step">第三步:频率</a></li>
     </ul>
     <form class="form-horizontal" id="itemForm" method="POST" style="margin-top: 0" action="/monitor-create">
         <div id="steps" class="steps">
@@ -238,16 +321,16 @@
             <div id="params">
             </div>
 
-                <div id="step1">
+                <div id="step1" class="stepDetails">
                     <div class="alert alert-info">
                         <h3>服务配置</h3>
-                        请配置需要测试的服务，并测试服务服务是否存在
+                        请填写需要测试的服务名称，并测试服务服务是否存在
                     </div>
                     <div class="form-group">
                         <span class="col-sm-2 control-label">名称</span>
 
                         <div class="col-sm-3">
-                            <input id="serviceName" class="form-control" style="float: left">
+                            <input id="serviceName" class="form-control" style="float: left" validate="true">
 
                             <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
                         </div>
@@ -267,17 +350,17 @@
                         <span class="col-sm-2 control-label" id="input08">组名</span>
 
                         <div class="col-sm-3">
-                            <input class="form-control">
+                            <input class="form-control"  validate="true">
 
                             <p class="help-block">Ganglia监控用的组名，如：SoftQuery</p>
                         </div>
                     </div>
                 </div>
 
-                <div id="step2" style="display: none">
+                <div id="step2" class="stepDetails" style="display: none">
                     <div class="alert alert-info">
                         <h3>接口配置</h3>
-                        请选择要测试的接口，并设置接口的参数值
+                        通过第一步的服务测试，就可以选择要测试的接口，并设置接口的参数值
                     </div>
                     <div class="form-group">
                         <span class="col-sm-2 control-label" id="step2-name">压测接口</span>
@@ -300,7 +383,7 @@
                 </div>
 
 
-                <div id="step3" style="display: none">
+                <div id="step3" class="stepDetails" style="display: none">
                     <div class="alert alert-info">
                         <h3>频率配置</h3>
                         请适当的配置压测的各项参数，不填写将按默认配置
@@ -377,7 +460,7 @@
         </div>
         <div class="form-actions">
             <a id="backBtn" class="btn btn-default disabled">返回</a>
-            <a id="nextBtn" class="btn btn-primary disabled">下一步</a>
+            <a id="nextBtn" class="btn btn-primary">下一步</a>
             <button id="saveBtn" class="btn btn-primary save" style="margin-left: 30px;display: none">保存</button>
         </div>
     </form>
@@ -427,8 +510,8 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" onclick="resetParams('#{methodID}ParamBody')" data-dismiss="modal">清空</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
                 </div>
             </div>
         </div>
