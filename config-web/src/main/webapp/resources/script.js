@@ -36,10 +36,10 @@ $(document).ready(function () {
         currentStep = step;
         if (step != "step1") {
             $("#backBtn").removeClass("disabled");
-        }else {
+        } else {
             $("#backBtn").addClass("disabled");
         }
-        if(step == "step3") {
+        if (step == "step3") {
             $("#nextBtn").addClass("disabled");
             $("#saveBtn").show();
         } else {
@@ -65,7 +65,25 @@ $(document).ready(function () {
         return proceed;
     }
 
-
+    $("#saveBtn").click(function () {
+        var data = new Object();
+        $(".field").each(function () {
+            data[$(this).attr("name")] = $(this).val();
+        });
+        $.ajax({
+            url: "save",
+            data: data,
+            type: 'post',
+            success: function (json) {
+                if (json.code == "0") {
+                    //成功，跳转到主界面
+                    alert("保存成功")
+                } else {
+                    alert("保存失败")
+                }
+            }
+        });
+    });
     $("#backBtn").click(function () {
         var nextStep = (currentStep.substr(4) * 1 - 1);
         if (nextStep >= 1) {
@@ -127,12 +145,13 @@ function reset() {
     serviceId = "";
     serviceName = "";
     $("#downloadCheck").html("");
+    $("#checkError").hide();
     $("#nextBtn").removeClass("disabled");
     $("#nextBtn").addClass("disabled");
     $("#methods").html("");
 }
 
-function resetParams(id){
+function resetParams(id) {
     $("#" + id).find("input").val("");
 }
 
@@ -145,11 +164,7 @@ function comfirmCheck() {
 }
 
 function addMethod() {
-    if (currentMethod == 0) {
-        currentMethod = 1;
-    } else {
-        currentMethod++;
-    }
+    currentMethod++;
     var template = $('#tpl_method').html();
     var data =
     {
@@ -161,15 +176,16 @@ function addMethod() {
 }
 
 function deleteMethod(id) {
-    $("#" + id).remove();
-    $("#" + id + "Param").remove();
+    $("#" + id + "Method").remove();
+    $("#" + id + "MethodParam").remove();
 }
 
 function paramSet(id) {
     //获取用户选中的方法
-    var selectedIndex = $("#" + id + "List")[0].selectedIndex;
-    var lastSelectIndex = $("#" + id + "SelectIndex").val();
-    var paramID = "#" + id + "Param";
+    var selectedIndex = $("#" + id + "MethodList")[0].selectedIndex;
+    var lastSelectIndex = $("#" + id + "MethodSelectIndex").val();
+    var paramID = "#" + id + "MethodParam";
+    var methodName = $("#" + id + "MethodList").val();
 
     if (lastSelectIndex != selectedIndex) {
         //用户切换了测试方法，或者第一次要设置参数,删除旧的参数填写框
@@ -180,7 +196,8 @@ function paramSet(id) {
         {
             methodID: id,
             selectIndex: selectedIndex,
-            list: methodParams
+            list: methodParams,
+            methodName: methodName
         };
         //新建一个参数填写框
         var modal = juicer(template, data);
@@ -246,9 +263,9 @@ function queryService() {
             } else {
                 $("#checkError").html(json.msg);
                 $("#checkError").show();
-                $("#downloadCheck").append("<dd>服务不存在</dd>");
+                $("#downloadCheck").append("<dd>失败</dd>");
                 $("#downloadProgress").removeClass("progress-bar-success");
-                $("#downloadProgress").addClass("bar bar-danger");
+                $("#downloadProgress").addClass("progress-bar-danger");
             }
         }
     });

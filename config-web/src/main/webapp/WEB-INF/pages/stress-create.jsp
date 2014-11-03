@@ -62,153 +62,159 @@
         <li><a href="#step2" class="step">第二步：接口</a></li>
         <li><a href="#step3" class="step">第三步:频率</a></li>
     </ul>
-    <form class="form-horizontal" id="itemForm" method="POST" style="margin-top: 0" action="/monitor-create">
+    <form class="form-horizontal" id="saveForm" method="POST" style="margin-top: 0" action="/stress/save">
         <div id="steps" class="steps">
             <%--参数设置--%>
             <div id="params">
             </div>
 
-                <div id="step1" class="stepDetails">
-                    <div class="alert alert-info">
-                        <h3>服务配置</h3>
-                        请填写需要测试的服务名称，并测试服务服务是否存在
+            <div id="step1" class="stepDetails">
+                <div class="alert alert-info">
+                    <h3>服务配置</h3>
+                    请填写需要测试的服务名称，并测试服务服务是否存在
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label">名称</span>
+
+                    <div class="col-sm-3">
+                        <input name="serviceName" id="serviceName" class="form-control field" style="float: left"
+                               validate="true">
+
+                        <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
                     </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label">名称</span>
+                    <a id="testBtn" class="btn btn-primary" onclick="queryService()" data-toggle="tooltip"
+                       data-placement="right" title="测试服务是否正常">测试</a>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label">描述</span>
 
-                        <div class="col-sm-3">
-                            <input id="serviceName" class="form-control" style="float: left" validate="true">
+                    <div class="col-sm-3">
+                        <input class="form-control field" name="describe" validate="true">
 
-                            <p class="help-block">如：com.baidu.softquery.SoftQuery v1.0</p>
-                        </div>
-                        <a id="testBtn" class="btn btn-primary" onclick="queryService()" data-toggle="tooltip" data-placement="right" title="测试服务是否正常">测试</a>
-                    </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label" id="input02">描述</span>
-
-                        <div class="col-sm-3">
-                            <input class="form-control">
-
-                            <p class="help-block">如：统计缓存查询服务的QPS等</p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label" id="input08">组名</span>
-
-                        <div class="col-sm-3">
-                            <input class="form-control"  validate="true">
-
-                            <p class="help-block">Ganglia监控用的组名，如：SoftQuery</p>
-                        </div>
+                        <p class="help-block">如：统计缓存查询服务的QPS等</p>
                     </div>
                 </div>
 
-                <div id="step2" class="stepDetails" style="display: none">
-                    <div class="alert alert-info">
-                        <h3>接口配置</h3>
-                        通过第一步的服务测试，就可以选择要测试的接口，并设置接口的参数值
-                    </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label" id="step2-name">压测接口</span>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label" id="input08">组名</span>
 
-                        <div class="col-sm-6">
-                            <table class="table-condensed designTable">
-                                <thead>
-                                <tr>
-                                    <th style="min-width: 220px;">名称</th>
-                                    <th>参数值</th>
-                                </tr>
-                                </thead>
-                                <tbody id="methods">
-                                </tbody>
-                            </table>
+                    <div class="col-sm-3">
+                        <input name="groupName" class="form-control field" validate="true">
 
-                            <a id="addBtn" class="btn btn-default" style="margin-top: 10px">Add</a>
-                        </div>
+                        <p class="help-block">Ganglia监控用的组名，如：SoftQuery</p>
                     </div>
                 </div>
+            </div>
 
+            <div id="step2" class="stepDetails" style="display: none">
+                <div class="alert alert-info">
+                    <h3>接口配置</h3>
+                    通过第一步的服务测试，就可以选择要测试的接口，并设置接口的参数值
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label" id="step2-name">压测接口</span>
 
-                <div id="step3" class="stepDetails" style="display: none">
-                    <div class="alert alert-info">
-                        <h3>频率配置</h3>
-                        请适当的配置压测的各项参数，不填写将按默认配置
-                    </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label" id="input03">请求延迟</span>
+                    <div class="col-sm-6">
+                        <table class="table-condensed designTable">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 220px;">名称</th>
+                                <th>参数值</th>
+                            </tr>
+                            </thead>
+                            <tbody id="methods">
+                            </tbody>
+                        </table>
 
-                        <div class="col-sm-3">
-                            <input class="form-control" type="text" size="5" onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
-
-                            <p class="help-block">每次调用服务时，延迟多少毫秒，如：10</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label" id="input05">失败延迟</span>
-
-                        <div class="col-sm-3">
-                            <input class="form-control" type="text" size="5" onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
-
-                            <p class="help-block">每次服务调用失败时，延迟多少毫秒，如：10000</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label" id="input06">Server Num</span>
-
-                        <div class="col-sm-3">
-                            <select class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
-                                <option>13</option>
-                                <option>14</option>
-                                <option>15</option>
-                            </select>
-
-                            <p class="help-block">模拟多少台客户端服务器</p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label" id="input07">Thread Num</span>
-
-                        <div class="col-sm-3">
-                            <select class="form-control">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
-                                <option>13</option>
-                                <option>14</option>
-                                <option>15</option>
-                            </select>
-
-                            <p class="help-block">每台客户端服务器启动多少个请求线程</p>
-                        </div>
+                        <a id="addBtn" class="btn btn-default" style="margin-top: 10px">Add</a>
                     </div>
                 </div>
+            </div>
+
+
+            <div id="step3" class="stepDetails" style="display: none">
+                <div class="alert alert-info">
+                    <h3>频率配置</h3>
+                    请适当的配置压测的各项参数，不填写将按默认配置
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label" id="input03">请求延迟</span>
+
+                    <div class="col-sm-3">
+                        <input name="requestDelay" class="form-control field" type="text" size="5"
+                               onkeyup="value=value.replace(/[^\d]/g,'')"
+                               onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+
+                        <p class="help-block">每次调用服务时，延迟多少毫秒，如：10</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label" id="input05">失败延迟</span>
+
+                    <div class="col-sm-3">
+                        <input name="failDelay" class="form-control field" type="text" size="5"
+                               onkeyup="value=value.replace(/[^\d]/g,'')"
+                               onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+
+                        <p class="help-block">每次服务调用失败时，延迟多少毫秒，如：10000</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label" id="input06">Server Num</span>
+
+                    <div class="col-sm-3">
+                        <select class="form-control field" name="serverNum">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                        </select>
+
+                        <p class="help-block">模拟多少台客户端服务器</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label" id="input07">Thread Num</span>
+
+                    <div class="col-sm-3">
+                        <select class="form-control field" name="threadNum">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                        </select>
+
+                        <p class="help-block">每台客户端服务器启动多少个请求线程</p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-actions">
             <a id="backBtn" class="btn btn-default disabled">返回</a>
             <a id="nextBtn" class="btn btn-primary">下一步</a>
-            <button id="saveBtn" class="btn btn-primary save" style="margin-left: 30px;display: none">保存</button>
+            <a id="saveBtn" class="btn btn-primary save" style="margin-left: 30px;display: none">保存</a>
         </div>
     </form>
 
@@ -218,7 +224,7 @@
 
 <!-- 添加一个参数设置对话框 -->
 <script type="text/template" id="tpl_param">
-    <div class="modal fade" id="#{methodID}Param" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <div class="modal fade" id="#{methodID}MethodParam" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -228,7 +234,8 @@
                     <h4 class="modal-title">参数设置</h4>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="#{methodID}SelectIndex" style="display: none" value="#{selectIndex}"/>
+                    <input type="text" id="#{methodID}MethodSelectIndex" style="display: none" value="#{selectIndex}"/>
+
                     <div class="alert alert-success" role="alert">参数类型为
                         <strong>基本类型</strong>
                         的，如int,long,String,Enum等，请直接填写参数值。参数类型为
@@ -243,13 +250,14 @@
                             <th class="col-sm-10">参数值</th>
                         </tr>
                         </thead>
-                        <tbody id="#{methodID}ParamBody">
+                        {# 方法参数列表 }
+                        <tbody id="#{methodID}MethodParamBody">
                         {@each list as item,index}
                         <tr>
                             <td>arg#{index}</td>
                             <td>#{item}</td>
                             <td>
-                                <input class="form-control"/>
+                                <input name="methods['#{methodName}']" class="form-control field"/>
                             </td>
                         </tr>
                         {@/each}
@@ -257,7 +265,9 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" onclick="resetParams('#{methodID}ParamBody')" data-dismiss="modal">清空</button>
+                    <button type="button" class="btn btn-default" onclick="resetParams('#{methodID}MethodParamBody')"
+                            data-dismiss="modal">清空
+                    </button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
                 </div>
             </div>
@@ -276,8 +286,8 @@
             </select>
         </td>
         <td class="col-sm-3">
-            <a class="btn btn-default" onclick="paramSet('#{methodID}Method')">设置</a>
-            <a class="btn btn-default" onclick="deleteMethod('#{methodID}Method')">删除</a>
+            <a class="btn btn-default" onclick="paramSet('#{methodID}')">设置</a>
+            <a class="btn btn-default" onclick="deleteMethod('#{methodID}')">删除</a>
         </td>
     </tr>
 </script>

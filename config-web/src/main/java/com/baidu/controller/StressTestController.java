@@ -4,6 +4,7 @@ import com.baidu.config.FrameworkConfig;
 import com.baidu.service.StressTestService;
 import com.baidu.vo.Msg;
 import com.baidu.vo.ServiceQuery;
+import com.baidu.vo.StressTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class StressTestController {
 
     @ResponseBody
     @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public Msg checkService(@RequestParam String serviceName) throws Exception {
+    public Msg checkService(String serviceName) throws Exception {
         String id = stressTestService.queryService(serviceName);
         Msg msg = new Msg();
         ServiceQuery serviceQuery = new ServiceQuery();
@@ -52,7 +53,7 @@ public class StressTestController {
 
     @ResponseBody
     @RequestMapping(value = "/load", method = RequestMethod.POST)
-    public Msg loadService(@RequestParam String serviceId,@RequestParam String serviceName) throws Exception {
+    public Msg loadService(String serviceId,String serviceName) throws Exception {
         String location;
         List list = null;
         if (frameworkConfig.getMode().equals("debug")){
@@ -65,6 +66,13 @@ public class StressTestController {
         }
         Msg msg = new Msg();
         msg.setReturnData(list);
+        return msg;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public Msg save(StressTest stressTest) {
+        Msg msg = new Msg();
         return msg;
     }
 
