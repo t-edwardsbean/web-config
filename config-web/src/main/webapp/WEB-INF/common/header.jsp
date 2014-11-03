@@ -16,7 +16,7 @@
 
     <title>web-config</title>
 
-    <script src="/resources/jquery-2.1.1.min.js"></script>
+    <script src="/resources/ext/js/jquery-2.1.1.min.js"></script>
     <!-- Bootstrap core CSS -->
     <link href="/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
