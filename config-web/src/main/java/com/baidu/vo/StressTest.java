@@ -2,6 +2,7 @@ package com.baidu.vo;
 
 import com.baidu.service.vo.SimpleMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -83,5 +84,19 @@ public class StressTest {
 
     public void setThreadNum(String threadNum) {
         this.threadNum = threadNum;
+    }
+
+    @Override
+    public String toString() {
+        return "StressTest{" +
+                "serviceName='" + serviceName + '\'' +
+                ", describe='" + describe + '\'' +
+                ", groupName='" + groupName + '\'' +
+                ", methods=" + methods +
+                ", requestDelay='" + requestDelay + '\'' +
+                ", failDelay='" + failDelay + '\'' +
+                ", serverNum='" + serverNum + '\'' +
+                ", threadNum='" + threadNum + '\'' +
+                '}';
     }
 }

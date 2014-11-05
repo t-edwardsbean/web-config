@@ -257,7 +257,7 @@
                             <td>arg#{index}</td>
                             <td>#{item}</td>
                             <td>
-                                <input name="methods['#{methodName}']" class="form-control field"/>
+                                <input name="methods['#{methodName}'][#{index}]" class="form-control field"/>
                             </td>
                         </tr>
                         {@/each}
