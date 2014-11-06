@@ -55,7 +55,7 @@ public class StressTestController {
     @RequestMapping(value = "/load", method = RequestMethod.POST)
     public Msg loadService(String serviceId,String serviceName) throws Exception {
         String location;
-        List list = null;
+        List list;
         if (frameworkConfig.getMode().equals("debug")){
             location = jarPath + File.separator + "thrift.jar";
             list = stressTestService.loadService(serviceName,location,false);

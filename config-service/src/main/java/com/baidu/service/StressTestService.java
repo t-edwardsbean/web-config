@@ -26,7 +26,7 @@ public interface StressTestService {
      * @param id
      * @param testId
      */
-    public void download(String id,int testId);
+    public File download(String id,int testId) throws Exception;
 
     /**
      * 加载完方法列表，是否删除该jar,以免用户更新服务接口时，缓存的jar没有得到更新。
@@ -38,4 +38,5 @@ public interface StressTestService {
      */
     public List<SimpleMethod> loadService(String serviceName,String jar,boolean clean) throws ClassNotFoundException;
 
+    public void run(int testId) throws Exception;
 }

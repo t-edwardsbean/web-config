@@ -1,6 +1,8 @@
 package com.baidu.service;
 
 import com.baidu.config.FrameworkConfig;
+import com.baidu.mapper.TestMapper;
+import com.baidu.model.TestConfig;
 import com.baidu.service.vo.SimpleMethod;
 import com.baidu.tools.Page;
 import com.baidu.tools.ReflectionUtil;
@@ -22,7 +24,8 @@ import java.util.List;
 public class StressTestServiceImpl implements StressTestService {
     private final static Logger log = LoggerFactory.getLogger(StressTestServiceImpl.class.getName());
     public static String jarPath = System.getProperty("project.root")+ File.separator + "libext";
-
+    @Autowired
+    private TestMapper testMapper;
 
     @Autowired
     private FrameworkConfig frameworkConfig;
@@ -43,8 +46,12 @@ public class StressTestServiceImpl implements StressTestService {
     }
 
     @Override
-    public void download(String id, int testId) {
-
+    public File download(String id, int testId) throws Exception{
+        String path = jarPath + File.separator + testId;
+        File dir = new File(path);
+        dir.mkdirs();
+        File jar = WebPlatTool.download(frameworkConfig.getWebToolPlatAddrsCfg(), id, path);
+        return jar;
     }
 
     @Override
@@ -70,5 +77,14 @@ public class StressTestServiceImpl implements StressTestService {
         return methods;
     }
 
+    @Override
+    public void run(int testId) throws Exception {
+        TestConfig testConfig = testMapper.getTestConfig(testId);
+        File jar = download(testConfig.getServiceId(),testId);
+    }
 
+
+    public void runLocal(TestConfig testConfig) {
+
+    }
 }

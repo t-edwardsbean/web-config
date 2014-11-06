@@ -16,6 +16,7 @@
         <module>config-tool</module>
         <module>config-test</module>
         <module>config-config</module>
+        <module>config-testframework</module>
     </modules>
     <properties>
         <jackson.version>2.0.4</jackson.version>
@@ -61,16 +62,12 @@
     </dependencies>
     <repositories>
         <repository>
-            <id>company</id>
-            <url>http://192.168.253.149:8081/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
             <id>baidu</id>
             <url>http://maven.scm.baidu.com:8081/nexus/content/groups/public/</url>
         </repository>
         <repository>
-            <id>cloudera</id>
-            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+            <id>company</id>
+            <url>http://192.168.253.149:8081/nexus/content/groups/public/</url>
         </repository>
         <!--<repository>-->
         <!--<id>public</id>-->
