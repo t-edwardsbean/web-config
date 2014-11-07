@@ -69,10 +69,7 @@ public class WebPlatTool {
             file.createNewFile();
             log.debug("Downloading file:" + file.getAbsolutePath());
             HttpUtil httpUtil = new HttpUtil();
-            List<NameValuePair> formParams = new ArrayList<NameValuePair>();// 设置表格参数
-            formParams.add(new BasicNameValuePair("language", "java"));
-            formParams.add(new BasicNameValuePair("id", serviceId));
-            HttpResponse response = httpUtil.doGet(webToolAddrs + "/" + ROOT + "/" + "download.action", null);
+            HttpResponse response = httpUtil.doGet(webToolAddrs + "/" + ROOT + "/" + "download.action?language=java&id=" + serviceId, null);
             InputStream inputStream = response.getEntity().getContent();
             byte buff[] = new byte[4096];
             int counts = 0;
