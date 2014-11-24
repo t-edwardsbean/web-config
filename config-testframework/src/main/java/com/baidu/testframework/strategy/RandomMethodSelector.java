@@ -1,4 +1,7 @@
-package com.baidu.testframework.core;
+package com.baidu.testframework.strategy;
+
+import com.baidu.testframework.core.MethodSelector;
+import com.baidu.tools.MethodParam;
 
 import java.util.List;
 import java.util.Random;

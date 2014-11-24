@@ -34,7 +34,7 @@ public class CustomHandlerExceptionResolver extends DefaultHandlerExceptionResol
                 Gson gson = new Gson();
                 Msg msgcode = new Msg();
                 msgcode.setCode("1");
-                msgcode.setMsg(ex.getMessage());
+                msgcode.setMsg(ex.getLocalizedMessage());
 
                 if (callback != null) {
                     callback = callback + "(" + gson.toJson(msgcode) + ")";

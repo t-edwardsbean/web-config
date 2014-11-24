@@ -35,6 +35,7 @@
                 <h4 class="modal-title">检测服务</h4>
             </div>
             <div class="modal-body" id="modalBody">
+                <input type="text" id="serviceId" name="serviceId" style="display: none" class="form-control field">
                 <div class="progress">
                     <div id="downloadProgress" class="active progress-bar progress-bar-success progress-bar-striped"
                          role="progressbar"
@@ -235,7 +236,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" id="#{methodID}MethodSelectIndex" style="display: none" value="#{selectIndex}"/>
-
+                    <%--<input type="text" name="methods['#{methodName}']" style="display: none" class="form-control methodSelect">--%>
                     <div class="alert alert-success" role="alert">参数类型为
                         <strong>基本类型</strong>
                         的，如int,long,String,Enum等，请直接填写参数值。参数类型为
@@ -279,7 +280,7 @@
 <script type="text/template" id="tpl_method">
     <tr id="#{methodID}Method">
         <td>
-            <select id="#{methodID}MethodList" class="form-control">
+            <select id="#{methodID}MethodList" class="form-control methodSelect">
                 {@each list as it}
                 <option value="#{it.methodName}">#{it.methodName}</option>
                 {@/each}

@@ -8,29 +8,19 @@ var serviceName = "";
 
 $(document).ready(function () {
 
-    var currentStep = "step1";
-    //锚点路由
-    routie({
-        "step1": function () {
-            showStep("step1");
-        },
-        "step2": function () {
-            if (validateStep("step1")) {
-                showStep("step2");
-            }
-            else {
-                routie("step1");
-            }
-        },
-        "step3": function () {
-            if (validateStep("step1") && validateStep("step2")) {
-                showStep("step3");
-            }
-            else {
-                routie("step1");
-            }
-        }
+    juicer.set({
+        'tag::operationOpen': '{@',
+        'tag::operationClose': '}',
+        'tag::interpolateOpen': '#{',
+        'tag::interpolateClose': '}',
+        'tag::noneencodeOpen': '##{',
+        'tag::noneencodeClose': '}',
+        'tag::commentOpen': '{#',
+        'tag::commentClose': '}'
     });
+
+    var currentStep = "step1";
+
 
     function showStep(step) {
         currentStep = step;
@@ -67,6 +57,12 @@ $(document).ready(function () {
 
     $("#saveBtn").click(function () {
         var data = new Object();
+        /*
+         TODO 遍历methods,将所有方法名提交，防止空参数方法未提交
+         */
+        $(".methodSelect").each(function () {
+            data["methods['" + $(this).val() + "']"] = "";
+        });
         $(".field").each(function () {
             data[$(this).attr("name")] = $(this).val();
         });
@@ -77,7 +73,8 @@ $(document).ready(function () {
             success: function (json) {
                 if (json.code == "0") {
                     //成功，跳转到主界面
-                    alert("保存成功")
+                    alert("保存成功");
+                    location.href = "index";
                 } else {
                     alert("保存失败")
                 }
@@ -103,17 +100,29 @@ $(document).ready(function () {
         $(this).parent().find(".help-block").remove();
     });
 
-
-    juicer.set({
-        'tag::operationOpen': '{@',
-        'tag::operationClose': '}',
-        'tag::interpolateOpen': '#{',
-        'tag::interpolateClose': '}',
-        'tag::noneencodeOpen': '##{',
-        'tag::noneencodeClose': '}',
-        'tag::commentOpen': '{#',
-        'tag::commentClose': '}'
+    //锚点路由
+    routie({
+        "step1": function () {
+            showStep("step1");
+        },
+        "step2": function () {
+            if (validateStep("step1")) {
+                showStep("step2");
+            }
+            else {
+                routie("step1");
+            }
+        },
+        "step3": function () {
+            if (validateStep("step1") && validateStep("step2")) {
+                showStep("step3");
+            }
+            else {
+                routie("step1");
+            }
+        }
     });
+
 
 //        $("#nextBtn").click(function () {
 //            $("#step1").hide();
@@ -144,6 +153,8 @@ function reset() {
     methodList = null;
     serviceId = "";
     serviceName = "";
+    $("#downloadProgress").removeClass("progress-bar-danger");
+    $("#downloadProgress").removeClass("progress-bar-success");
     $("#downloadCheck").html("");
     $("#checkError").hide();
     $("#nextBtn").removeClass("disabled");
@@ -174,6 +185,7 @@ function addMethod() {
     var html = juicer(template, data);
     $("#methods").append(html);
 }
+
 
 function deleteMethod(id) {
     $("#" + id + "Method").remove();
@@ -224,7 +236,7 @@ function queryService() {
     $.ajax({
         type: "post",
         url: "check",
-        data: {serviceName: "com.baidu.softquery.SoftQuery v1.0"},
+        data: {serviceName: $("#serviceName").val()},
         async: false,
         dataType: "json",
         success: function (json) {
@@ -238,24 +250,26 @@ function queryService() {
                 $.ajax({
                     type: "post",
                     url: "load",
-                    data: {serviceId: serviceId, serviceName: "com.baidu.softquery.SoftQuery v1.0"},
+                    data: {serviceId: serviceId, serviceName: $("#serviceName").val()},
                     async: false,
                     dataType: "json",
                     success: function (json) {
                         //载入接口列表
                         if (json.code == "0") {
-                            methodList = json.returnData
+                            methodList = json.returnData;
                             $("#downloadCheck").append("<dd>成功</dd>");
                             $("#downloadCheck").append("<dt>服务名称:</dt>");
                             $("#downloadCheck").append("<dd>" + serviceName + "</dd>");
                             $("#downloadProgress").css("width", "100%");
+                            $("#downloadProgress").addClass("progress-bar-success");
                             $("#confirmBtn").removeClass("disabled");
+                            $("#serviceId").val(serviceId);
                             addMethod();
                         } else {
                             $("#checkError").html(json.msg);
                             $("#checkError").show();
                             $("#downloadCheck").append("<dd>失败</dd>");
-                            $("#downloadProgress").removeClass("progress-bar-success");
+
                             $("#downloadProgress").addClass("progress-bar-danger");
                         }
                     }

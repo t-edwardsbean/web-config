@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 ">
 
-    <context:component-scan base-package="com.baidu"/>
     <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/webconfig?autoReconnect=true&amp;createDatabaseIfNotExist=true&amp;"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/web_config?autoReconnect=true&amp;characterEncoding=UTF-8&amp;"/>
         <property name="username" value="root"/>
         <property name="password" value="123"/>
     </bean>
@@ -22,10 +19,23 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
+        <!--关联Mapper对应的XML-->
+        <property name="mapperLocations" value="classpath*:com/baidu/mapper/*.xml" />
     </bean>
 
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.baidu.mapper" />
+    <!--注册Mapper接口-->
+    <bean id="testMethodMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.baidu.mapper.TestMethodMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
     </bean>
 
+    <bean id="testConfigMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.baidu.mapper.TestConfigMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+
+    <bean id="methodParamMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.baidu.mapper.MethodParamMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
 </beans>
