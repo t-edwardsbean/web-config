@@ -1,7 +1,9 @@
 package com.baidu.service;
 
 
+import com.baidu.model.TestConfig;
 import com.baidu.service.vo.SimpleMethod;
+import com.baidu.vo.StressTest;
 
 import java.io.File;
 import java.util.List;
@@ -38,5 +40,15 @@ public interface StressTestService {
      */
     public List<SimpleMethod> loadService(String serviceName,String jar,boolean clean) throws ClassNotFoundException;
 
-    public void run(int testId) throws Exception;
+    public void save(TestConfig testConfig);
+
+    public long run(int testId) throws Exception;
+
+    public List<TestConfig> findAllSimple(int page);
+
+    public void stop(long taskId);
+
+    public void delete(int id);
+
+    public List<TestConfig> findAllSimple();
 }

@@ -7,10 +7,9 @@ import com.baidu.testframework.config.ClientConfigProvider;
 import com.baidu.testframework.config.FrameworkConfig;
 import com.baidu.testframework.config.MethodConfig;
 import com.baidu.testframework.pool.ClientServer;
-import com.codahale.metrics.ConsoleReporter;
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
+import com.baidu.testframework.strategy.MethodSelector;
+import com.baidu.testframework.strategy.RandomMethodSelector;
+import com.codahale.metrics.*;
 import com.codahale.metrics.ganglia.GangliaReporter;
 import info.ganglia.gmetric4j.gmetric.GMetric;
 import org.slf4j.Logger;
@@ -97,11 +96,11 @@ public class FrameworkManager {
         gangliaReporter.start(1, TimeUnit.SECONDS);
 
         //注册metrics,每个1秒打印metrics到控制台
-        ConsoleReporter consoleReporter = ConsoleReporter.forRegistry(metricRegistry)
+        Slf4jReporter slf4jReporter = Slf4jReporter.forRegistry(metricRegistry)
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
-        consoleReporter.start(1, TimeUnit.SECONDS);
+        slf4jReporter.start(10, TimeUnit.SECONDS);
     }
 
     private InetSocketAddress[] parseSocketAddrArray(String cfgStr) {

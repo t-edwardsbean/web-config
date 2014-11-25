@@ -12,6 +12,16 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-exec</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baidu</groupId>
+            <artifactId>config-testframework</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.baidu</groupId>
             <artifactId>config-dao</artifactId>
             <version>${project.version}</version>

@@ -1,0 +1,13 @@
+@startuml
+autonumber
+actor web
+actor master
+actor worker
+actor executor
+web -> master:Run task(config)
+master -> web:Return taskId
+master -> worker:LaunchExecutor
+worker -> executor:New process
+executor -> worker:Fetch task config
+
+@enduml

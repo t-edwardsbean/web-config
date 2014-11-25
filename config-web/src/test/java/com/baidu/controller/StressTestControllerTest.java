@@ -35,4 +35,11 @@ public class StressTestControllerTest {
                 .param("serviceName","com.baidu.softquery.SoftQuery v1.0")
         ).andDo(print());
     }
+
+    @Test
+    public void testRun() throws Exception {
+        this.mockMvc.perform(get("/stress/run")
+                .param("id","1")
+        ).andDo(print());
+    }
 }

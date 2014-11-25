@@ -1,26 +1,25 @@
 package com.baidu.vo;
 
-import com.baidu.service.vo.SimpleMethod;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by edwardsbean on 14-11-3.
  */
-public class StressTest {
+public class  StressTest {
     private String serviceName;
     private String describe;
     private String groupName;
+    private String serviceId;
     /**
      * 测试方法，以及参数集合
      */
     private Map<String,List<String>> methods;
-    private String requestDelay;
-    private String failDelay;
-    private String serverNum;
-    private String threadNum;
+    private Integer requestDelay;
+    private Integer failDelay;
+    private Integer serverNum;
+    private Integer threadNum;
 
     public String getServiceName() {
         return serviceName;
@@ -54,36 +53,44 @@ public class StressTest {
         this.methods = methods;
     }
 
-    public String getRequestDelay() {
+    public Integer getRequestDelay() {
         return requestDelay;
     }
 
-    public void setRequestDelay(String requestDelay) {
+    public void setRequestDelay(Integer requestDelay) {
         this.requestDelay = requestDelay;
     }
 
-    public String getFailDelay() {
+    public Integer getFailDelay() {
         return failDelay;
     }
 
-    public void setFailDelay(String failDelay) {
+    public void setFailDelay(Integer failDelay) {
         this.failDelay = failDelay;
     }
 
-    public String getServerNum() {
+    public Integer getServerNum() {
         return serverNum;
     }
 
-    public void setServerNum(String serverNum) {
+    public void setServerNum(Integer serverNum) {
         this.serverNum = serverNum;
     }
 
-    public String getThreadNum() {
+    public Integer getThreadNum() {
         return threadNum;
     }
 
-    public void setThreadNum(String threadNum) {
+    public void setThreadNum(Integer threadNum) {
         this.threadNum = threadNum;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
     @Override

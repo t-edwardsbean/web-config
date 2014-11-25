@@ -14,8 +14,9 @@
         </property>
     </bean>
     <mvc:resources location="/resources/" mapping="/resources/**" />
+    <mvc:resources location="/executor/" mapping="/executor*/**" />
     <mvc:resources location="/" mapping="/*.html" />
-
+    <mvc:default-servlet-handler/>
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>

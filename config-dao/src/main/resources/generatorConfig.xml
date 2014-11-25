@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <classPathEntry
+            location="/home/edwardsbean/software/apache-maven-3.0.5/Respositories/Maven/mysql/mysql-connector-java/5.1.32/mysql-connector-java-5.1.32.jar"/>
+    <context id="mysqlTables" targetRuntime="MyBatis3">
+        <!--去除所有mybatis生成的无用告警注释-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/web_config?useUnicode=true&amp;characterEncoding=UTF-8"
+                        userId="root" password="123"/>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!--生成Model-->
+        <javaModelGenerator targetPackage="com.baidu.model"
+                            targetProject="/home/edwardsbean/workspace/web-config/config-model/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成xml-->
+        <sqlMapGenerator targetPackage="com.baidu.mapper"
+                         targetProject="/home/edwardsbean/workspace/web-config/config-dao/src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--生成Mapper-->
+        <javaClientGenerator targetPackage="com.baidu.mapper" type="XMLMAPPER"
+                             targetProject="/home/edwardsbean/workspace/web-config/config-dao/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <!--表映射-->
+        <table schema="" tableName="method_param" domainObjectName="MethodParam"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="method_param_id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+        <table schema="" tableName="config" domainObjectName="TestConfig">
+            <generatedKey column="config_id" sqlStatement="MySql"
+                          identity="true"/>
+
+        </table>
+        <table schema="" tableName="method" domainObjectName="TestMethod"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="method_id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

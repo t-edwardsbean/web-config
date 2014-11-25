@@ -9,9 +9,15 @@
 <%@ include file="../common/header.jsp" %>
 
 
-<div class="container-fluid">
-    <h1>Stress Log Browser</h1>
-
+<div class="container-fluid" style="padding-top: 20px;">
+    <div class="panel panel panel-info" style="margin-bottom: 0">
+        <!-- Default panel contents -->
+        <div class="panel-heading">任务浏览器</div>
+        <div class="panel-body">
+            <p>所有已提交的任务，都可以在这里查看到</p>
+            <p>通过日志可以查看压测进程的运行情况</p>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -32,11 +38,12 @@
 
 <script type="text/template" id="tpl_log_table">
     {@each list as it}
-    <tr style="cursor: pointer;" onclick="location.href='/#{it.id}/logs/web-config.log'">
+    <tr style="cursor: pointer;" onclick="location.href='http://192.168.253.251/ganglia/?r=hour&cs=&ce=&m=load_one&s=by+name&c=server&h=192.168.253.126&host_regex=&max_graphs=0&tab=m&vn=&hide-hf=false&sh=1&z=small&hc=4'">
         <td>#{it.id}</td>
         <td>#{it.time}</td>
         <td>
-            <button type="button" onclick="deleteLog('#{it.id}',event)" class="btn btn-default btn-sm">删除</button>
+            <button type="button" onclick="deleteLog('#{it.id}',event)" class="btn btn-default btn-sm">停止</button>
+            <button type="button" onclick="showLog('#{it.id}',event)" class="btn btn-default btn-sm">日志</button>
         </td>
     </tr>
     {@/each}
@@ -74,6 +81,11 @@
         event.stopPropagation();
     }
 
+    function showLog(id,event) {
+        location.href='/' + id + '/logs/web-config.log';
+        event.stopPropagation();
+
+    }
     function addLog() {
         var template = $('#tpl_log_table').html();
         var logList;

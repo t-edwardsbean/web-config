@@ -1,6 +1,5 @@
 package com.baidu.testframework.strategy;
 
-import com.baidu.testframework.core.MethodSelector;
 import com.baidu.tools.MethodParam;
 
 import java.util.List;

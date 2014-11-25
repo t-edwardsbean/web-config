@@ -1,9 +1,11 @@
 package com.baidu.testframework.config;
 
+import java.io.Serializable;
+
 /**
  * Created by edwardsbean on 14-10-15.
  */
-public class ClientConfigProvider {
+public class ClientConfigProvider implements Serializable {
     private String serviceName;
     private int clientThreadCount;
     private int failedRequestDelay;

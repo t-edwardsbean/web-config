@@ -4,30 +4,22 @@ import com.google.common.base.Preconditions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 /**
  * Created by edwardsbean on 14-10-14.
  */
-@Component("frameworkConfig")
-public class FrameworkConfig {
-    @Value("${tf.register.service.name}")
+public class FrameworkConfig implements Serializable {
     private String serviceName;
-    @Value("${tf.register.server.adds}")
     private String regAddrsCfg;
-    @Value("${tf.client.failed.delay}")
     private int failedRequestDelay;
-    @Value("${tf.client.server}")
     private int clientServerCount;
-    @Value("${tf.client.thread}")
     private int clientThreadCount;
-    @Value("${tf.client.request.delay}")
     private int requestDelay;
-    @Value("${tf.report.ganglia.adds}")
     private String gangliaAddrsCfg;
-    @Value("${tf.report.name}")
     private String reportName;
     //被测试的接口类
     private Class testClazz;
-    @Value("${tf.webtoolplat.adds}")
     private String webToolPlatAddrsCfg;
 
     public String getWebToolPlatAddrsCfg() {

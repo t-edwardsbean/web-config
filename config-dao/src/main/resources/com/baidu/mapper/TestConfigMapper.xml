@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baidu.mapper.TestConfigMapper">
+    <resultMap id="SimpleResult" type="com.baidu.model.TestConfig">
+        <id column="config_id" property="configId" jdbcType="INTEGER"/>
+        <result column="service_name" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="BaseResultMap" type="com.baidu.model.TestConfig">
+        <id column="config_id" property="configId" jdbcType="INTEGER"/>
+        <result column="service_id" property="serviceId" jdbcType="VARCHAR"/>
+        <result column="service_name" property="serviceName" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+        <result column="request_delay" property="requestDelay" jdbcType="INTEGER"/>
+        <result column="fail_delay" property="failDelay" jdbcType="INTEGER"/>
+        <result column="server_num" property="serverNum" jdbcType="INTEGER"/>
+        <result column="thread_num" property="threadNum" jdbcType="INTEGER"/>
+        <collection property="methods" column="config_id"
+                    select="com.baidu.mapper.TestMethodMapper.findMethodByConfig"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    config_id, service_id, service_name, description, group_name, request_delay, fail_delay, 
+    server_num, thread_num
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.baidu.model.TestConfigExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from config
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from config
+        where config_id = #{configId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from config
+    where config_id = #{configId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.baidu.model.TestConfigExample">
+        delete from config
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.baidu.model.TestConfig">
+        <selectKey resultType="java.lang.Integer" keyProperty="configId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into config (service_id, service_name, description,
+        group_name, request_delay, fail_delay,
+        server_num, thread_num)
+        values (#{serviceId,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+        #{groupName,jdbcType=VARCHAR}, #{requestDelay,jdbcType=INTEGER}, #{failDelay,jdbcType=INTEGER},
+        #{serverNum,jdbcType=INTEGER}, #{threadNum,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.baidu.model.TestConfig">
+        <selectKey resultType="java.lang.Integer" keyProperty="configId" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serviceId != null">
+                service_id,
+            </if>
+            <if test="serviceName != null">
+                service_name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="requestDelay != null">
+                request_delay,
+            </if>
+            <if test="failDelay != null">
+                fail_delay,
+            </if>
+            <if test="serverNum != null">
+                server_num,
+            </if>
+            <if test="threadNum != null">
+                thread_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serviceId != null">
+                #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceName != null">
+                #{serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="requestDelay != null">
+                #{requestDelay,jdbcType=INTEGER},
+            </if>
+            <if test="failDelay != null">
+                #{failDelay,jdbcType=INTEGER},
+            </if>
+            <if test="serverNum != null">
+                #{serverNum,jdbcType=INTEGER},
+            </if>
+            <if test="threadNum != null">
+                #{threadNum,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.baidu.model.TestConfigExample" resultType="java.lang.Integer">
+        select count(*) from config
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update config
+        <set>
+            <if test="record.configId != null">
+                config_id = #{record.configId,jdbcType=INTEGER},
+            </if>
+            <if test="record.serviceId != null">
+                service_id = #{record.serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.serviceName != null">
+                service_name = #{record.serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.description != null">
+                description = #{record.description,jdbcType=VARCHAR},
+            </if>
+            <if test="record.groupName != null">
+                group_name = #{record.groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.requestDelay != null">
+                request_delay = #{record.requestDelay,jdbcType=INTEGER},
+            </if>
+            <if test="record.failDelay != null">
+                fail_delay = #{record.failDelay,jdbcType=INTEGER},
+            </if>
+            <if test="record.serverNum != null">
+                server_num = #{record.serverNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.threadNum != null">
+                thread_num = #{record.threadNum,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update config
+        set config_id = #{record.configId,jdbcType=INTEGER},
+        service_id = #{record.serviceId,jdbcType=VARCHAR},
+        service_name = #{record.serviceName,jdbcType=VARCHAR},
+        description = #{record.description,jdbcType=VARCHAR},
+        group_name = #{record.groupName,jdbcType=VARCHAR},
+        request_delay = #{record.requestDelay,jdbcType=INTEGER},
+        fail_delay = #{record.failDelay,jdbcType=INTEGER},
+        server_num = #{record.serverNum,jdbcType=INTEGER},
+        thread_num = #{record.threadNum,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.baidu.model.TestConfig">
+        update config
+        <set>
+            <if test="serviceId != null">
+                service_id = #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceName != null">
+                service_name = #{serviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="requestDelay != null">
+                request_delay = #{requestDelay,jdbcType=INTEGER},
+            </if>
+            <if test="failDelay != null">
+                fail_delay = #{failDelay,jdbcType=INTEGER},
+            </if>
+            <if test="serverNum != null">
+                server_num = #{serverNum,jdbcType=INTEGER},
+            </if>
+            <if test="threadNum != null">
+                thread_num = #{threadNum,jdbcType=INTEGER},
+            </if>
+        </set>
+        where config_id = #{configId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.baidu.model.TestConfig">
+    update config
+    set service_id = #{serviceId,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      request_delay = #{requestDelay,jdbcType=INTEGER},
+      fail_delay = #{failDelay,jdbcType=INTEGER},
+      server_num = #{serverNum,jdbcType=INTEGER},
+      thread_num = #{threadNum,jdbcType=INTEGER}
+    where config_id = #{configId,jdbcType=INTEGER}
+  </update>
+    <!--以下非自动生成-->
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * from config
+    </select>
+    <select id="findAllSimple" resultMap="SimpleResult">
+        SELECT * from config
+    </select>
+</mapper>

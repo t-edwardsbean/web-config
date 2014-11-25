@@ -17,6 +17,7 @@
         <module>config-test</module>
         <module>config-config</module>
         <module>config-testframework</module>
+        <module>config-model</module>
     </modules>
     <properties>
         <jackson.version>2.0.4</jackson.version>
@@ -30,7 +31,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>11.0.2</version>
+            <version>15.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -75,8 +76,6 @@
         <!--</repository>-->
     </repositories>
     <build>
-
-        <finalName>web-config</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -91,7 +90,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
                     <includes>
                         <include>**/*Tests.java</include>
                     </includes>

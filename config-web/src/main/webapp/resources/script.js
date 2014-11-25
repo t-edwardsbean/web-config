@@ -237,7 +237,7 @@ function queryService() {
         type: "post",
         url: "check",
         data: {serviceName: $("#serviceName").val()},
-        async: false,
+        async: true,
         dataType: "json",
         success: function (json) {
             //查询服务
@@ -251,7 +251,7 @@ function queryService() {
                     type: "post",
                     url: "load",
                     data: {serviceId: serviceId, serviceName: $("#serviceName").val()},
-                    async: false,
+                    async: true,
                     dataType: "json",
                     success: function (json) {
                         //载入接口列表

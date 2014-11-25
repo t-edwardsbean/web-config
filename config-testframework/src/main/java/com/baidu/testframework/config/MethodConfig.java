@@ -1,10 +1,11 @@
 package com.baidu.testframework.config;
 
-import com.baidu.testframework.core.MethodParam;
-import com.baidu.testframework.tools.ReflectionUtil;
+import com.baidu.tools.MethodParam;
+import com.baidu.tools.ReflectionUtil;
 import com.google.common.base.Preconditions;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  * Created by edwardsbean on 14-10-14.
  */
 @Component
-public class MethodConfig {
+public class MethodConfig implements Serializable {
     //方法名：参数值
     private Map<String, List<String>> methods;
     private boolean paramChecked = false;
