@@ -63,6 +63,12 @@ public class StressTestServiceImpl implements StressTestService {
 
     }
 
+    /**
+     * TODO: 打包编译交由actor任务引擎，否咋在web端做同步影响用户
+     * @param id
+     * @return
+     * @throws Exception
+     */
     //libext/服务id/服务id.zip + gen-java + 打包的jar
     @Override
     public File download(String id) throws Exception {
@@ -154,9 +160,6 @@ public class StressTestServiceImpl implements StressTestService {
 
     @Override
     public long run(int testId) throws Exception {
-        /*
-        TODO 添加测试参数
-         */
         TestConfig testConfig = testConfigMapper.selectByPrimaryKey(testId);
         List<TestMethod> testMethods = testConfig.getMethods();
         Map<String,List<String>> methods = new HashMap<>();

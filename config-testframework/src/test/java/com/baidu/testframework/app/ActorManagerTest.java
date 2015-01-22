@@ -12,7 +12,6 @@ public class ActorManagerTest {
     private ActorManager manager;
     @Before
     public void setUp() throws Exception {
-        manager = new ActorManager();
 
     }
 }

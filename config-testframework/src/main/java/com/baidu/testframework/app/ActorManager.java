@@ -32,8 +32,8 @@ public class ActorManager {
     private final static Logger log = LoggerFactory.getLogger(ActorManager.class.getName());
     public static String webRoot = System.getProperty("project.root");
 
-    public ActorManager() {
-    }
+//    public ActorManager() {
+//    }
 
     @Autowired
     public ActorManager(@Value("${dsf.stress.local}") boolean local) {
